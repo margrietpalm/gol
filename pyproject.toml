@@ -1,0 +1,59 @@
+[project]
+name = "gol"
+version = "0.0.1"
+dependencies = ["streamlit", "matplotlib"]
+
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+include-package-data = true
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.flakeheaven]
+exclude = ["build/*", ".git/*", ".tox", "notebooks"]
+format = "grouped"
+max_line_length = 120
+
+[tool.flakeheaven.plugins]
+flake8-comprehensions = ["+*"]
+flake8-print = ["+*"]
+pep8-naming = ["+*"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "skats.utils.time",
+    "pandas"
+]
+ignore_missing_imports = true
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+envlist = py311
+
+[testenv]
+deps =
+    flakeheaven
+    pytest
+    pytest-cov
+    mypy
+commands =
+    flakeheaven lint
+    pytest --disable-warnings --cov-report term
+    mypy src
+
+[run]
+omit = .tox/*,venv/*,tests/*,htmlcov*,analyses*
+
+"""
