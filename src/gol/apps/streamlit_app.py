@@ -2,7 +2,11 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
-from gol.core.game import Grid
+# from gol.core.game import Grid
+from ..core.game import Grid
+
+
+
 import pyautogui
 
 
