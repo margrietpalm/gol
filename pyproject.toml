@@ -1,7 +1,7 @@
 [project]
 name = "gol"
 version = "0.0.1"
-dependencies = ["streamlit", "matplotlib"]
+dependencies = ["streamlit", "matplotlib", "pyautogui", "numpy"]
 
 [build-system]
 requires = ["setuptools", "setuptools_scm"]

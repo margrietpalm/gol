@@ -1,71 +1,57 @@
-import time
 import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib import colors
-import matplotlib.animation as animation
-import streamlit.components.v1 as components
-
+import numpy as np
 from gol.core.game import Grid
-
-# Set up model
-
-def simulate(num, grid, grid_plot):  # update the y values (every 1000ms)
-    grid.update()
-    grid_plot.set_data(grid.grid)
-    return grid_plot,
+import pyautogui
 
 
-# Set up plot
-fig, ax = plt.subplots()
-cmap = colors.ListedColormap(['white', 'black'])
-bounds = [0, .5, 1]
-norm = colors.BoundaryNorm(bounds, cmap.N)
-ax.tick_params(axis='both', left=False, top=False, right=False, bottom=False, labelleft=False, labeltop=False,
-               labelright=False, labelbottom=False)
-grid_plot = ax.imshow(grid.grid, interpolation='nearest', origin='lower', cmap=cmap, norm=norm)
+class Game:
+
+    def __init__(self):
+        self.init_ui()
+        self.init_game()
+
+    def init_ui(self):
+        self.w = st.sidebar.slider('width', min_value=10, max_value=200, value=100)
+        self.h = st.sidebar.slider('height', min_value=10, max_value=200, value=100)
+        self.frac_alive = st.sidebar.slider('% alive', min_value=0, max_value=100,
+                                            value=5)
+        st.title("Conway's game of life")
+        self.st_plot = st.pyplot(plt)
+
+    def init_plot(self):
+        fig, self.ax = plt.subplots()
+        cmap = colors.ListedColormap(['white', 'black'])
+        bounds = [0, .5, 1]
+        norm = colors.BoundaryNorm(bounds, cmap.N)
+        self.ax.tick_params(axis='both', left=False, top=False, right=False, bottom=False, labelleft=False,
+                            labeltop=False,
+                            labelright=False, labelbottom=False)
+        self.grid_plot = self.ax.imshow(np.zeros((self.grid.nrow, self.grid.ncol)), interpolation='nearest',
+                                        origin='lower', cmap=cmap, norm=norm)
+        self.st_plot.pyplot(plt)
+
+    def init_game(self):
+        self.grid = Grid(nrow=self.h, ncol=self.w)
+        self.grid.seed(int(self.w * self.h * self.frac_alive / 100))
+
+    def step(self, i):  # update the y values (every 1000ms)
+        if i == 0:
+            self.grid.reset()
+        else:
+            self.grid.update()
+        self.grid_plot.set_data(self.grid.grid)
+        self.st_plot.pyplot(plt)
 
 
-grid_ani = animation.FuncAnimation(fig, simulate, 25, fargs=(grid, grid_plot),
-                                    interval=50, blit=True)
+if st.sidebar.button("⟳", help='restart simulation'):
+    pyautogui.hotkey("ctrl", "F5")
 
-# Set up UI
+game = Game()
+game.init_plot()
+i = 0
 
-# w = st.sidebar.number_input(width, min_value=10, max_value=200, value=100)
-# h = st.sidebar.number_input(height, min_value=10, max_value=200, value=100)
-grid = Grid(nrow=100, ncol=100)
-grid.seed(500)
-
-st.title("Conway's game of life")
-components.html(grid_ani.to_jshtml(), height=1000)
-# st_plot = st.pyplot(plt)
-
-# def init():  # give a clean slate to start
-#     grid_plot.set_data(grid.grid)
-#
-# def simulate(i):  # update the y values (every 1000ms)
-#     grid.update()
-#     grid_plot.set_data(grid.grid)
-#     st_plot.pyplot(plt)
-#
-# init()
-#
-# start_button = st.button('start/stop')
-# started = False
-#
-# if start_button:
-#     print(started)
-#     if not started:
-#         started = True
-#         i = 0
-#         while True:
-#             simulate(i)
-#             i += 1
-#     else:
-#         started = False
-
-
-# run_button = st.button('▶')
-# if run_button:
-#     run()
-# # st.button('⏯', on_click=update_grid)
-# # st.button('⏹', on_click=st.stop)
+while True:
+    game.step(i)
+    i += 1

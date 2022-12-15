@@ -55,8 +55,11 @@ class Grid:
             cell.set_neighbors(nb)
 
     def seed(self, n: int):
-        alive_idx = np.random.choice(self.nrow * self.ncol, size=n, replace=False)
-        for idx in alive_idx:
+        self.alive_idx = np.random.choice(self.nrow * self.ncol, size=n, replace=False)
+        self.reset()
+
+    def reset(self):
+        for idx in self.alive_idx:
             self.cells[idx].state = State.alive
 
     def update(self):
