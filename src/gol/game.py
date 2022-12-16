@@ -3,7 +3,7 @@ from typing import List, Optional
 
 import numpy as np
 
-from gol.core.utils import get_neighbors
+from gol.utils import get_neighbors
 
 
 class State(IntEnum):

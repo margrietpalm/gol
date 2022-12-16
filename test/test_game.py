@@ -2,7 +2,7 @@ import pytest
 
 import numpy as np
 
-import gol.core.game as game
+import gol.game as game
 
 
 class TestCell:

@@ -1,6 +1,6 @@
 import pytest
 
-import gol.core.utils as utils
+import gol.utils as utils
 
 
 @pytest.mark.parametrize('x, expected', [(0, [0, 1]), (1, [0, 1, 2]), (2, [1, 2])])
