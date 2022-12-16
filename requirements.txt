@@ -2,3 +2,5 @@ numpy
 matplotlib
 streamlit
 pyautogui
+git+https://github.com/margrietpalm/gol
+
