@@ -5,7 +5,7 @@ import numpy as np
 from gol.game import Grid
 
 
-import pyautogui
+# import pyautogui
 
 
 class Game:
@@ -47,8 +47,8 @@ class Game:
         self.st_plot.pyplot(plt)
 
 
-if st.sidebar.button("⟳", help='restart simulation'):
-    pyautogui.hotkey("ctrl", "F5")
+# if st.sidebar.button("⟳", help='restart simulation'):
+#     pyautogui.hotkey("ctrl", "F5")
 
 game = Game()
 game.init_plot()
